@@ -18,7 +18,7 @@ Recibe el nombre de un usuario y una pregunta, consulta a la IA de Groq y devuel
 ## Requisitos previos
 
 - Python 3.10 o superior
-- Una API Key de Groq (puedes obtenerla gratis en https://console.groq.com)
+- Una API Key de Groq (puede obtenerse gratis en https://console.groq.com)
 
 ## Instalación
 
@@ -28,35 +28,35 @@ git clone https://github.com/Alejandro7868/groq-backend.git
 cd groq-backend
 ```
 
-2. Crea y activa el entorno virtual
+2. Crear y activar el entorno virtual
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
 ```
 
-3. Instala las dependencias
+3. Instalar las dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Crea el archivo `.env` en la raíz del proyecto con tu API Key
+4. Crear el archivo `.env` en la raíz del proyecto con la API Key
 ```
 GROQ_API_KEY=tu_clave_aqui
 ```
 
 ## Uso
 
-1. Inicia el servidor
+1. Iniciar el servidor
 ```bash
 python -m uvicorn main:app --reload
 ```
 
-2. Abre el navegador en
+2. Abrir el navegador en
 ```
 http://127.0.0.1:8000
 ```
 
-3. Escribe tu nombre y tu pregunta en la interfaz y haz clic en Enviar
+3. Escribir nombre y pregunta en la interfaz y hacer clic en Enviar
 
 ## Endpoint disponible
 
