@@ -23,7 +23,7 @@ class SolicitudUsuario(BaseModel):
     nombre: str
     prompt: str
 
-# Nuevo endpoint que sirve el archivo HTML
+#endpoint que sirve el archivo HTML
 @app.get("/")
 def index():
     return FileResponse("index.html")
