@@ -23,10 +23,13 @@ class SolicitudUsuario(BaseModel):
     nombre: str
     prompt: str
 
-#endpoint que sirve el archivo HTML
 @app.get("/")
 def index():
     return FileResponse("index.html")
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 @app.post("/chat")
 def chat(solicitud: SolicitudUsuario):
