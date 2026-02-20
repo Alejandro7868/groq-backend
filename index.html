@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asistente IA</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 48px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+
+    p.subtitle {
+      color: #888;
+      margin-bottom: 36px;
+      font-size: 0.9rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #444;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #1a1a1a;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #1a1a1a;
+      background: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    button:hover { background: #333; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+
+    .respuesta {
+      margin-top: 28px;
+      border-top: 1px solid #eee;
+      padding-top: 24px;
+      display: none;
+    }
+
+    .respuesta p {
+      color: #333;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .error p { color: #c0392b; }
+
+    .loader {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.85rem;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Asistente IA</h1>
+    <p class="subtitle">Escribe tu nombre y hazle una pregunta al asistente.</p>
+
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" placeholder="Tu nombre" />
+
+    <label for="prompt">Pregunta</label>
+    <textarea id="prompt" placeholder="Escribe tu pregunta aquí..."></textarea>
+
+    <button id="btn" onclick="enviar()">Enviar</button>
+
+    <div class="loader" id="loader">Consultando...</div>
+
+    <div class="respuesta" id="respuesta">
+      <p id="texto-respuesta"></p>
+    </div>
+  </div>
+
+  <script>
+    async function enviar() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const prompt = document.getElementById('prompt').value.trim();
+      const btn = document.getElementById('btn');
+      const loader = document.getElementById('loader');
+      const respuestaDiv = document.getElementById('respuesta');
+      const textoRespuesta = document.getElementById('texto-respuesta');
+
+      if (!nombre || !prompt) {
+        alert('Por favor completa tu nombre y tu pregunta.');
+        return;
+      }
+
+      btn.disabled = true;
+      loader.style.display = 'block';
+      respuestaDiv.style.display = 'none';
+      respuestaDiv.classList.remove('error');
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, prompt })
+        });
+
+        const data = await res.json();
+        textoRespuesta.textContent = data.respuesta;
+        respuestaDiv.style.display = 'block';
+
+      } catch (error) {
+        textoRespuesta.textContent = 'Error al conectar con el servidor. Asegúrate de que el backend está corriendo.';
+        respuestaDiv.classList.add('error');
+        respuestaDiv.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
